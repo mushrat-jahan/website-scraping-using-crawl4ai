@@ -1,5 +1,5 @@
 # Website Scraping using Crawl4AI
-This project implements a robust web scraping solution using Crawl4AI framework, specifically optimized for Bengali content extraction from websites. It handles challenges like dynamic content loading, IP blocking, and content rendering issues.
+This project implements a web scraping solution using Crawl4AI framework, specifically optimized for Bengali content extraction from websites. It handles challenges like dynamic content loading, IP blocking, and content rendering issues.
 
 ### Why Choose Crawl4AI?
 Crawl4AI offers several advantages over traditional scraping tools:
