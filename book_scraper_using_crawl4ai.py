@@ -17,7 +17,7 @@ async def scrape_chapter(url, chapter_number, crawler):
         dict: Chapter data
     """
     try:
-        print(f" Scraping Chapter {chapter_number}...")
+        print(f" Scraping Chapter {chapter_number}: ")
         
         result = await crawler.arun(
             url=url,
@@ -28,13 +28,13 @@ async def scrape_chapter(url, chapter_number, crawler):
         if result.success:
             soup = BeautifulSoup(result.html, 'html.parser')
             
-            # Extract chapter title
+            # Extracting chapter title
             title = ""
             title_elem = soup.find('h1') or soup.find('h2', class_='entry-title')
             if title_elem:
                 title = title_elem.get_text(strip=True)
             
-            # Remove unwanted elements before extracting content
+            # Removing unwanted elements before extracting content
             for elem in soup.find_all(['div', 'section', 'form'], class_=lambda x: x and any(
                 keyword in str(x).lower() for keyword in ['login', 'signup', 'sign-up', 'register', 'auth']
             )):
@@ -44,7 +44,7 @@ async def scrape_chapter(url, chapter_number, crawler):
             for img in soup.find_all('img'):
                 img.decompose()
             
-            # Remove navigation, footer, sidebar
+            # Removing navigation, footer, sidebar
             for elem in soup.find_all(['nav', 'footer', 'aside', 'header']):
                 elem.decompose()
             
@@ -74,7 +74,6 @@ async def scrape_chapter(url, chapter_number, crawler):
                     for p in paragraphs:
                         text = p.get_text(strip=True)
                         if text:
-                            # Stop if we encounter content-ending keywords
                             text_lower = text.lower()
                             if any(keyword in text_lower for keyword in [
                                 'পরবর্তী অধ্যায়', 'next chapter', 'আরও পড়ুন', 'read more',
@@ -132,7 +131,7 @@ async def scrape_book_with_chapters(url):
     """
     try:
         async with AsyncWebCrawler(verbose=False) as crawler:
-            print(f"Scraping main page...")
+            print(f"Scraping main page: ")
             
             # Scrape main book page
             result = await crawler.arun(
@@ -146,7 +145,7 @@ async def scrape_book_with_chapters(url):
             
             soup = BeautifulSoup(result.html, 'html.parser')
             
-            # Remove unwanted elements from main page
+            # Removing unwanted elements from main page
             for img in soup.find_all('img'):
                 img.decompose()
             
@@ -181,7 +180,7 @@ async def scrape_book_with_chapters(url):
                         book_details['author'] = text
                         break
             
-            # links from main article/content 
+            # links from main article 
             chapter_links = []
             base_domain = urlparse(url).netloc
             
@@ -196,7 +195,7 @@ async def scrape_book_with_chapters(url):
             if not main_content_area:
                 main_content_area = soup.find('body')
             
-            # Look for ALL internal links in the content area
+            # Looking for ALL internal links in the content area
             if main_content_area:
                 for link in main_content_area.find_all('a', href=True):
                     href = link['href']
@@ -265,13 +264,13 @@ async def scrape_book_with_chapters(url):
                 if skipped_count > 0:
                     print(f"\n Skipped {skipped_count} chapters (content length < 100 characters)")
             else:
-                print("\n No content links found. Trying to scrape main page content...")
+                print("\n No content links found. Trying to scrape main page content.")
                 # If no links found, scrape the main page itself as chapter 1
                 chapter_data = await scrape_chapter(url, 1, crawler)
                 if chapter_data.get('content_length', 0) >= 50:
                     chapters_data.append(chapter_data)
                 else:
-                    print(f" Main page content too short ({chapter_data.get('content_length', 0)} chars)")
+                    print(f" Main page content is too short ({chapter_data.get('content_length', 0)} chars)")
             
             return {
                 "url": url,
@@ -307,7 +306,7 @@ def save_to_json(data, filename="book_complete.json"):
 
 async def main():
     print("=" * 60)
-    print(" Book Chapter Scraper")
+    print(" Book Scraper")
     print("=" * 60)
     
     url = input("\nEnter the book main page URL: ").strip()
@@ -319,7 +318,7 @@ async def main():
     if not url.startswith(('http://', 'https://')):
         url = 'https://' + url
     
-    print(f"\n Starting scraping process...\n")
+    print(f"\n Starting scraping process.\n")
     
     # Scrape book and all chapters
     data = await scrape_book_with_chapters(url)
