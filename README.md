@@ -25,6 +25,7 @@ Crawl4AI offers several advantages over traditional scraping tools:
 1. Clone the repository and set up the virtual environment: ``git clone https://github.com/mushrat-jahan/website-scraping-using-crawl4ai.git``
 2. Set virtual environment: ``python -m venv venv``
 3. Activate the virtual environment: ``.venv\Scripts\activate`` (for Windows)
-4. Install required dependencies: ``pip install -r requirements.txt``
-5. Run the code and give website link
+4. Install required dependencies: ``pip install -r requirements.txt`` or install crawl4AI: ``pip install crawl4ai``
+5. Run the Setup Command: ``crawl4ai-setup``
+6. Run the code and give a book url
 
